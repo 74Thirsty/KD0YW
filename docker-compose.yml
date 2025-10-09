@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  backend:
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend/app:/app/app
+      - recordings:/data/recordings
+    environment:
+      - SCANNERFORGE_RECORDING_DIR=/data/recordings
+      - SCANNERFORGE_ALLOWED_ORIGINS=["http://localhost:5173"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  frontend:
+    build: ./frontend
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE=http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=scannerforge
+      - POSTGRES_USER=scannerforge
+      - POSTGRES_PASSWORD=scannerforge
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+volumes:
+  pgdata:
+  recordings:
