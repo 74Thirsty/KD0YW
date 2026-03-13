@@ -1,6 +1,6 @@
-# ScannerForge
+# KD0YW
 
-ScannerForge is a legal-first radio streaming stack. It ingests public HTTP feeds, authorized
+KD0YW is a legal-first radio streaming stack. It ingests public HTTP feeds, authorized
 local files, and RTL-SDR captures in permissible bands, then transcodes and serves Opus audio to a
 React dashboard. The stack is modular so new lawful plugins can be dropped in without touching the
 core.
